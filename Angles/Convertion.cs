@@ -1,11 +1,11 @@
 
 using Vector2 = UnityEngine.Vector2;
 using Mathf = UnityEngine.Mathf;
-using UnityUtils.Angles.Metrics;
+using UnityUtils.Metrics;
 
 namespace UnityUtils.Angles
 {
-  public static class Convert
+  public static class Convertion
   {
     // Retorna em forma de indíce o ponto para qual esse vetor está apontando.
     // Considere que o angulo de 360º será dividido em fatias(slices). A função vai
