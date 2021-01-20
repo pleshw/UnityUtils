@@ -2,6 +2,7 @@
 using Vector2 = UnityEngine.Vector2;
 using Mathf = UnityEngine.Mathf;
 using UnityUtils.Metrics;
+using System.Linq;
 
 namespace UnityUtils.Angles
 {
@@ -33,11 +34,87 @@ namespace UnityUtils.Angles
       return Mathf.FloorToInt(angle / step);
     }
 
+    public static Position.Horizontal VectorToHorizontal(Vector2 inputVector)
+    {
+      var normalized = inputVector.normalized;
 
-    public static Cardinal.Point VectorToCardinal(Vector2 inputVector)
+      if (normalized.x > 0)
+      {
+        return Position.Horizontal.RIGHT;
+      }
+      else if (normalized.x < 0)
+      {
+        return Position.Horizontal.LEFT;
+      }
+      else
+      {
+        return Position.Horizontal.NONE;
+      }
+    }
+
+
+
+    public static Position.Position2D VectorToPosition2D(Vector2 inputVector)
+    {
+      var cardinalIndex = VectorToIndex(inputVector, 4);
+      return Position.PositionByIndex(cardinalIndex);
+    }
+
+    public static Position.Position2D Cardinal4ToPosition2D(Cardinal.Points4 point)
+    {
+      var cardinalIndex = Cardinal.points4ByIndex.ToList().FindIndex(p => p == point);
+      return Position.PositionByIndex(cardinalIndex);
+    }
+
+    public static Cardinal.Points4 VectorToCardinal4(Vector2 inputVector)
+    {
+      var cardinalIndex = VectorToIndex(inputVector, 4);
+      return Cardinal.Cardinal4ByIndex(cardinalIndex);
+    }
+
+    public static Cardinal.Points8 VectorToCardinal8(Vector2 inputVector)
     {
       var cardinalIndex = VectorToIndex(inputVector, 8);
-      return Cardinal.GetPointByIndex(cardinalIndex);
+      return Cardinal.Cardinal8ByIndex(cardinalIndex);
+    }
+
+    public static Position.Direction2D VectorToDirection2D(Vector2 inputVector)
+    {
+      var cardinalIndex = VectorToIndex(inputVector, 8);
+      var result = new Position.Direction2D { horizontal = Position.Horizontal.NONE, vertical = Position.Vertical.NONE };
+      if (cardinalIndex == 2)
+      {
+        result.horizontal = Position.Horizontal.LEFT;
+        return result;
+      }
+
+      if (cardinalIndex == 6)
+      {
+        result.horizontal = Position.Horizontal.RIGHT;
+        return result;
+      }
+
+      if (cardinalIndex == 0 || cardinalIndex == 1 || cardinalIndex == 7)
+      {
+        result.vertical = Position.Vertical.TOP;
+        if (cardinalIndex == 1)
+          result.horizontal = Position.Horizontal.LEFT;
+        if (cardinalIndex == 7)
+          result.horizontal = Position.Horizontal.RIGHT;
+        return result;
+      }
+
+      if (cardinalIndex == 3 || cardinalIndex == 4 || cardinalIndex == 5)
+      {
+        result.vertical = Position.Vertical.BOTTOM;
+        if (cardinalIndex == 3)
+          result.horizontal = Position.Horizontal.LEFT;
+        if (cardinalIndex == 5)
+          result.horizontal = Position.Horizontal.RIGHT;
+        return result;
+      }
+
+      return result;
     }
   }
 }

@@ -4,34 +4,21 @@ using UnityUtils.Models.Entity.Movement;
 
 namespace UnityUtils.Controllers.Entity.Movement
 {
-  public class KeyboardMovementController : MonoBehaviour
+  public abstract class KeyboardMovementController : MonoBehaviour
   {
-    [SerializeField] private Animator animator;
-    [SerializeField] new private Rigidbody2D rigidbody;
+    [SerializeField] protected SpriteRenderer spriteRenderer;
+    [SerializeField] protected Animator animator;
+    [SerializeField] new protected Rigidbody2D rigidbody;
 
-    MobileEntity entity;
+    public MobileEntity entity;
 
-    [SerializeField] private float entitySpeed = 1;
+    [SerializeField] protected float entitySpeed = 5;
 
-    void Awake()
-    {
-      animator = GetComponent<Animator>();
-      rigidbody = GetComponent<Rigidbody2D>();
-      entity = new MobileEntity(rigidbody.position, entitySpeed);
-    }
-
-    void FixedUpdate()
-    {
-      Move();
-    }
-
-    void Move()
+    protected void Move()
     {
       var input = InputVector();
-      Debug.Log($"{entity.MovementInfo()} {input.x} {input.y}");
       entity.Move(InputVector());
       rigidbody.MovePosition(entity.position);
-      // animator.Play(entity.MovementInfo());
     }
 
     // Retorna o vetor que representa a direção pressionada pelo jogador.
