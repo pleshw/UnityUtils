@@ -1,8 +1,13 @@
 namespace UnityUtils.Models.Scenes
 {
-    public abstract class Chat
+  public abstract class Dialog
+  {
+    public bool started;
+
+
+    public void SetCurrent(ChatNode node)
     {
-      public bool started;
 
     }
+  }
 }
