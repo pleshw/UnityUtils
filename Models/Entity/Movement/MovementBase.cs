@@ -1,25 +1,21 @@
 using UnityEngine;
-
+using UnityUtils.Angles;
+using UnityUtils.Metrics;
 
 namespace UnityUtils.Models.Entity.Movement
 {
-  public abstract class MobileEntity
+  public abstract class MovementBase
   {
     public Vector2 position;
     public float moveSpeed;
 
-    public MovementState state;
+    public float moveThreshold = 0.05f;
 
-    public MobileEntity(
-      Vector2 pos,
-      float mspeed,
-      MovementState _state = MovementState.IDLE
-     )
-      => (position, moveSpeed, state) = (pos, mspeed, _state);
+    public Cardinal.Point direction;
 
-    // Retorna o estado e a direção do movimento da entidade
-    // EX: "IDLE NW"
-    public abstract string MovementInfo();
+    public MovementBase(Vector2 pos, float mspeed)
+      => (position, moveSpeed) = (pos, mspeed);
+
 
     public abstract void SetDirection(Vector2 inputVector);
 
@@ -28,7 +24,6 @@ namespace UnityUtils.Models.Entity.Movement
       Vector2 movementMagnitude = inputVector * moveSpeed;
       Vector2 nextPosition = position + movementMagnitude * Time.fixedDeltaTime;
       position = nextPosition;
-      SetDirection(inputVector);
     }
   }
 

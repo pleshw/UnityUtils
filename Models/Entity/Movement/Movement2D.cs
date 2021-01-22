@@ -5,34 +5,31 @@ using UnityEngine;
 
 namespace UnityUtils.Models.Entity.Movement
 {
-  public class Movement2D : MobileEntity
+  public class Movement2D : MovementBase
   {
-    public Cardinal.Points4 direction;
+    /// <summary>
+    /// Verdadeiro se a entidade pode realizar movimentos em diagonal
+    /// </summary>
+    public bool diagonals;
 
-    public Movement2D(
-      Vector2 pos,
-      float mspeed,
-      Cardinal.Points4 direction,
-      MovementState state = MovementState.IDLE
-     ) : base(pos, mspeed, state)
+    public Movement2D(Vector2 pos, float mspeed, Cardinal.Point dir, bool diag = true) : base(pos, mspeed)
     {
-      this.direction = direction;
+      diagonals = diag;
+      direction = dir;
     }
-
-    public override string MovementInfo()
-      => $"{state.ToString("F").ToLower()} {direction.ToString().ToLower()} ";
 
     public override void SetDirection(Vector2 inputVector)
     {
-
       if (inputVector.magnitude > 0)
       {
-        state = MovementState.WALK;
-        direction = Convertion.VectorToCardinal4(inputVector);
-      }
-      else
-      {
-        state = MovementState.IDLE;
+        if (diagonals)
+        {
+          direction = Convertion.VectorToCardinal8(inputVector);
+        }
+        else
+        {
+          direction = Convertion.VectorToCardinal4(inputVector);
+        }
       }
     }
   }
